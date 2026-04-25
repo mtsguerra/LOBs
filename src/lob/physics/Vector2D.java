@@ -33,6 +33,18 @@ public class Vector2D implements HasPoint {
         return new Vector2D(this.x * scalar, this.y * scalar);
     }
 
+    // Retorna um vetor com a mesma direção mas comprimento (magnitude) = 1
+    public Vector2D normalize() {
+        double mag = Math.sqrt(x * x + y * y);
+        if (mag == 0) return new Vector2D(0, 0); // Evita divisão por zero
+        return new Vector2D(x / mag, y / mag);
+    }
+
+    // Já agora, se não tiveres o multiply:
+    public Vector2D multiply(double factor) {
+        return new Vector2D(x * factor, y * factor);
+    }
+
     // Produto escalar (dot product)
     public double dot(Vector2D v) {
         return (this.x * v.x) + (this.y * v.y);

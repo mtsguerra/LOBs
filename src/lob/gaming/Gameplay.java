@@ -1,6 +1,10 @@
 package lob.gaming;
 
 public interface Gameplay {
-    void step(double dt); // O passo da simulação física
-    void reset();
+    String getName();
+    String getInstructions();
+    double getWidth();  // Mudado de int para double
+    double getHeight(); // Mudado de int para double
+    void resetGame();   // Mudado de reset() para resetGame()
+    void step();        // Vamos manter sem parâmetros para simplificar
 }

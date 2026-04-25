@@ -63,6 +63,12 @@ public class MockGame extends GameAnimation {
 
     @Override
     public void resetGame() {
-        resetCounter++;
+        this.resetCounter++;
+    }
+
+    @Override
+    public void step() {
+        // O MockGame não precisa de fazer nada no step,
+        // mas o método TEM de existir para o Java ficar feliz.
     }
 }

@@ -1,5 +1,5 @@
 package lob.physics.shapes;
 
-public interface Appearence {
+public interface Appearance {
     // Interface marcadora (vazia por agora)
 }

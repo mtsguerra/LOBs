@@ -1,4 +1,4 @@
-package lob.exceptions;
+package lob;
 
 public class LotsOfBallsException extends Exception {
     public LotsOfBallsException(String message) {

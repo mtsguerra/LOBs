@@ -16,7 +16,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * Extends `TestData` and uses parameterized and standard unit tests
  * to ensure the correctness of the `Vector2D` class methods and constants.
  */
-class Vector2DTest extends TestData {
+class
+Vector2DTest extends TestData {
 
     /**
      * Test that Vector2D is a record

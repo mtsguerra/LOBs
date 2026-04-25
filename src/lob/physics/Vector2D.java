@@ -1,6 +1,9 @@
 package lob.physics;
 
 public class Vector2D {
+
+    public static final Vector2D NULL_VECTOR = new Vector2D(0, 0);
+
     private final double x;
     private final double y;
 

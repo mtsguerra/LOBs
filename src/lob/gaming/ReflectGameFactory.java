@@ -2,17 +2,22 @@ package lob.gaming;
 
 import java.lang.reflect.InvocationTargetException;
 
-public class ReflectGameFactory {
-    // Definido na FAQ: O Loader para carregar as classes
+// 1. Adicionamos o Genérico aqui em cima para o teste parar de reclamar
+public class ReflectGameFactory<T extends GameAnimation> {
+
     private final static ClassLoader LOADER = ReflectGameFactory.class.getClassLoader();
 
-    // Este método cria a instância de um jogo dado o nome da classe
-    // Ex: "lob.gaming.games.Cannon"
-    public Object createInstance(String className) throws Exception {
+    // Construtor vazio para o teste da linha 32 (new ReflectGameFactory<>())
+    public ReflectGameFactory() {
+    }
+
+    // 2. Mudamos o retorno de "Object" para "T"
+    @SuppressWarnings("unchecked") // Isto diz ao Java "confia em mim, o cast é seguro"
+    public T createInstance(String className) throws Exception {
         try {
             Class<?> clazz = LOADER.loadClass(className);
-            // Usa reflexão para chamar o construtor vazio
-            return clazz.getDeclaredConstructor().newInstance();
+            // 3. Fazemos o "cast" (T) do objeto criado para o tipo Genérico do jogo
+            return (T) clazz.getDeclaredConstructor().newInstance();
         } catch (ClassNotFoundException | NoSuchMethodException |
                  InstantiationException | IllegalAccessException |
                  InvocationTargetException e) {

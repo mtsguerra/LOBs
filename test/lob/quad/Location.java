@@ -1,6 +1,8 @@
 package lob.quad;
 
 
+import lob.quadtree.HasPoint;
+
 /**
  * Helper test class implementing the HasPoint interface
  * 

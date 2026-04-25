@@ -3,11 +3,11 @@ package lob.quadtree;
 import lob.physics.Vector2D;
 import java.util.Set;
 
-public class NodeTrie extends Trie {
-    private Trie topLeft;
-    private Trie topRight;
-    private Trie bottomLeft;
-    private Trie bottomRight;
+public class NodeTrie<T extends HasPoint> extends Trie<T> {
+    private Trie<T> topLeft;
+    private Trie<T> topRight;
+    private Trie<T> bottomLeft;
+    private Trie<T> bottomRight;
 
     private double xMid, yMid;
 
@@ -15,32 +15,31 @@ public class NodeTrie extends Trie {
         this.xMid = (xMin + xMax) / 2;
         this.yMid = (yMin + yMax) / 2;
 
-        // Agora criamos as folhas passando as fronteiras de cada um dos 4 quadrantes!
-        this.topLeft = new LeafTrie(xMin, xMid, yMin, yMid);
-        this.topRight = new LeafTrie(xMid, xMax, yMin, yMid);
-        this.bottomLeft = new LeafTrie(xMin, xMid, yMid, yMax);
-        this.bottomRight = new LeafTrie(xMid, xMax, yMid, yMax);
+        this.topLeft = new LeafTrie<>(xMin, xMid, yMin, yMid);
+        this.topRight = new LeafTrie<>(xMid, xMax, yMin, yMid);
+        this.bottomLeft = new LeafTrie<>(xMin, xMid, yMid, yMax);
+        this.bottomRight = new LeafTrie<>(xMid, xMax, yMid, yMax);
     }
 
     @Override
-    public Trie insert(Vector2D point) {
-        if (point.getX() < xMid) {
-            if (point.getY() < yMid)
-                topLeft = topLeft.insert(point);
+    public Trie<T> insert(T element) {
+        // Usamos element.x() e element.y() da interface HasPoint
+        if (element.x() < xMid) {
+            if (element.y() < yMid)
+                topLeft = topLeft.insert(element);
             else
-                bottomLeft = bottomLeft.insert(point);
+                bottomLeft = bottomLeft.insert(element);
         } else {
-            if (point.getY() < yMid)
-                topRight = topRight.insert(point);
+            if (element.y() < yMid)
+                topRight = topRight.insert(element);
             else
-                bottomRight = bottomRight.insert(point);
+                bottomRight = bottomRight.insert(element);
         }
         return this;
     }
 
     @Override
-    public void collectPoints(Vector2D center, double radius, Set<Vector2D> found) {
-        // (No futuro, poderás otimizar isto para não pesquisar em quadrantes vazios/distantes)
+    public void collectPoints(Vector2D center, double radius, Set<T> found) {
         topLeft.collectPoints(center, radius, found);
         topRight.collectPoints(center, radius, found);
         bottomLeft.collectPoints(center, radius, found);

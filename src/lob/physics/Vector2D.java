@@ -1,6 +1,9 @@
 package lob.physics;
 
-public class Vector2D {
+import lob.quadtree.HasPoint; // 1. Adicionamos o import da interface
+
+// 2. Dizemos que o Vector2D implementa a interface HasPoint
+public class Vector2D implements HasPoint {
 
     public static final Vector2D NULL_VECTOR = new Vector2D(0, 0);
 
@@ -33,5 +36,16 @@ public class Vector2D {
     // Produto escalar (dot product)
     public double dot(Vector2D v) {
         return (this.x * v.x) + (this.y * v.y);
+    }
+
+    // 3. Os métodos obrigatórios da interface HasPoint!
+    @Override
+    public double x() {
+        return this.x;
+    }
+
+    @Override
+    public double y() {
+        return this.y;
     }
 }

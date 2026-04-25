@@ -1,6 +1,8 @@
 package lob.quad;
 
 
+import lob.quadtree.NodeTrie;
+import lob.quadtree.Trie;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

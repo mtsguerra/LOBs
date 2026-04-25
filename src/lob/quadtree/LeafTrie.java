@@ -5,10 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class LeafTrie extends Trie {
-    private List<Vector2D> points = new ArrayList<>();
-
-    // A folha precisa de saber as suas fronteiras para quando tiver de se dividir!
+public class LeafTrie<T extends HasPoint> extends Trie<T> {
+    private List<T> elements = new ArrayList<>();
     private double xMin, xMax, yMin, yMax;
 
     public LeafTrie(double xMin, double xMax, double yMin, double yMax) {
@@ -19,30 +17,30 @@ public class LeafTrie extends Trie {
     }
 
     @Override
-    public Trie insert(Vector2D point) {
-        // Se ainda há espaço, adiciona o ponto
-        if (points.size() < capacity) {
-            points.add(point);
+    public Trie<T> insert(T element) {
+        if (elements.size() < capacity) {
+            elements.add(element);
             return this;
         }
 
-        // Se excedeu a capacidade, cria um novo Node com as MESMAS fronteiras desta folha
-        NodeTrie newNode = new NodeTrie(xMin, xMax, yMin, yMax);
+        NodeTrie<T> newNode = new NodeTrie<>(xMin, xMax, yMin, yMax);
 
-        // Redistribui os pontos antigos da folha para o novo nó
-        for (Vector2D p : points) {
+        for (T p : elements) {
             newNode.insert(p);
         }
 
-        // Insere o novo ponto e retorna o Node (que agora substitui esta folha na árvore)
-        return newNode.insert(point);
+        return newNode.insert(element);
     }
 
     @Override
-    public void collectPoints(Vector2D center, double radius, Set<Vector2D> found) {
-        for (Vector2D p : points) {
-            // Verifica se o ponto está dentro do círculo de pesquisa
-            if (p.add(center.scale(-1)).norm() <= radius) {
+    public void collectPoints(Vector2D center, double radius, Set<T> found) {
+        for (T p : elements) {
+            // Como agora usamos HasPoint, calculamos a distância usando os métodos p.x() e p.y()
+            double dx = p.x() - center.getX(); // Assume que Vector2D tem o método getX()
+            double dy = p.y() - center.getY(); // Assume que Vector2D tem o método getY()
+
+            // Teorema de Pitágoras para ver se a distância é menor que o raio
+            if (Math.sqrt(dx * dx + dy * dy) <= radius) {
                 found.add(p);
             }
         }

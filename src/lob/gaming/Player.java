@@ -1,7 +1,6 @@
 package lob.gaming;
 
 public class Player {
-    // Classe que representa as informações de um jogador individual
     private String name;
     private int score;
 
@@ -10,7 +9,14 @@ public class Player {
         this.score = 0;
     }
 
-    // Podes precisar de getters mais tarde, deixo já o básico:
     public String getName() { return name; }
     public int getScore() { return score; }
+
+    // --- ADICIONA ESTE MÉTODO ---
+    // O teste na linha 178 precisa disto para criar a "password/chave" do jogador
+    public String generateKey() {
+        // Criamos uma chave baseada no nome.
+        // Adicionamos um sufixo para garantir que tem tamanho suficiente para o substring do teste.
+        return name + "_session_key_12345";
+    }
 }

@@ -11,7 +11,7 @@ import lob.physics.shapes.Circle;
 import lob.physics.shapes.Rectangle;
 import lob.physics.shapes.Shape;
 import lob.physics.Vector2D;
-import lob.quad.PointQuadtree;
+import lob.quadtree.PointQuadtree;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;

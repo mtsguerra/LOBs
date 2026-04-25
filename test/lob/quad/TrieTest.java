@@ -1,5 +1,6 @@
 package lob.quad;
 
+import lob.quadtree.Trie;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -25,7 +26,7 @@ public class TrieTest {
 		double x2=0.007499999999999999D;
 		double y2=0.007499999999999999D;
 		
-		assertEquals(0,Trie.getDistance(x1, y1, x2, y2),Location.RADIUS);
+		assertEquals(0, Trie.getDistance(x1, y1, x2, y2),Location.RADIUS);
 		assertTrue(Trie.getDistance(x1, y1, x2, y2)<Location.RADIUS);
 	}
 	

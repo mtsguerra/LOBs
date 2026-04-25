@@ -5,45 +5,73 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-// 1. "implements Iterable<Shape>" permite usar o mundo num loop for-each
+/**
+ * O PhysicsWorld gere todos os objetos físicos e coordena a simulação.
+ */
 public class PhysicsWorld implements Iterable<Shape> {
 
-    // A lista que guarda todas as bolas e retângulos do mundo
     private final List<Shape> shapes;
+    private final double width;
+    private final double height;
 
-    public PhysicsWorld() {
+    /**
+     * Construtor que define as dimensões do mundo.
+     * Resolve o erro: constructor PhysicsWorld in class... cannot be applied to given types.
+     */
+    public PhysicsWorld(double width, double height) {
         this.shapes = new ArrayList<>();
+        this.width = width;
+        this.height = height;
     }
 
-    // Método para adicionar objetos ao mundo
-    public void add(Shape shape) {
+    /**
+     * Adiciona uma forma ao mundo.
+     */
+    public void addShape(Shape shape) {
         if (shape != null) {
             shapes.add(shape);
         }
     }
 
-    // 2. Método obrigatório para o "Iterable" funcionar
-    // Resolve o erro "for-each not applicable to expression type"
+    /**
+     * Atalho para addShape.
+     */
+    public void add(Shape shape) {
+        addShape(shape);
+    }
+
     @Override
     public Iterator<Shape> iterator() {
         return shapes.iterator();
     }
 
     /**
-     * O coração do motor de física.
-     * @param dt Delta Time (tempo que passou desde o último frame)
+     * Getters para as dimensões (úteis para detetar colisões com as bordas).
+     */
+    public double getWidth() { return width; }
+    public double getHeight() { return height; }
+
+    /**
+     * Executa um passo da simulação física.
      */
     public void step(double dt) {
-        // Por agora, o step percorre as formas e atualiza a sua posição
-        // Mais tarde, aqui chamaremos o CollisionManager e as ForceStrategies
-        for (Shape shape : shapes) {
-            // Lógica básica de movimento (Posição = Posição + Velocidade * dt)
-            // Nota: Isto assume que a tua classe Shape tem acesso à velocidade
-        }
+        // No futuro, este método irá:
+        // 1. Aplicar forças (Gravidade, Atrito)
+        // 2. Mover as formas (s.move(v, dt))
+        // 3. Resolver colisões entre objetos e com as paredes
     }
 
-    // Método utilitário para limpar o mundo entre testes
+    /**
+     * Remove todos os objetos do mundo.
+     */
     public void clear() {
         shapes.clear();
+    }
+
+    /**
+     * Retorna a lista de todas as formas presentes.
+     */
+    public List<Shape> getShapes() {
+        return shapes;
     }
 }

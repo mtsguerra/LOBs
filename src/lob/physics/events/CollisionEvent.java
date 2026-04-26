@@ -1,19 +1,13 @@
 package lob.physics.events;
 
 import lob.physics.shapes.Shape;
+import lob.physics.engine.CollisionManifold;
 
-// Este é um evento específico que implementa a interface base
-public class CollisionEvent implements PhysicsEvent {
-
-    // Uma colisão envolve sempre duas formas!
-    private final Shape shape1;
-    private final Shape shape2;
-
-    public CollisionEvent(Shape shape1, Shape shape2) {
-        this.shape1 = shape1;
-        this.shape2 = shape2;
-    }
-
-    public Shape getShape1() { return shape1; }
-    public Shape getShape2() { return shape2; }
+/**
+ * Representa o evento de duas formas a baterem uma na outra.
+ * Resolve o erro: actual and formal argument lists differ in length
+ */
+public record CollisionEvent(Shape colliding, Shape collided, CollisionManifold collision) implements PhysicsEvent {
+    // O Java record cria automaticamente os métodos colliding(), collided() e collision()
+    // que o teste exige nas linhas 56, 57 e 58.
 }

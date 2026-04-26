@@ -389,7 +389,7 @@ class SimpleCollisionManagerTest extends TestData {
             var collision = new CollisionManifold(true,penetration,new Vector2D(-1,0));
 
             var expected = new Circle(new Vector2D(0,0), new Vector2D(-1,0),radius,null);
-            assertEquals(expected, collisionManager.resolveCircleCollision( ball, brick, collision));
+            assertEquals(expected, collisionManager/**/.resolveCircleCollision( ball, brick, collision));
         }
 
         /**

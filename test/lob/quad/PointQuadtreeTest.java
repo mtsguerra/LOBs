@@ -1,5 +1,6 @@
 package lob.quad;
 
+import lob.quadtree.PointOutOfBoundException;
 import lob.quadtree.PointQuadtree;
 import lob.quadtree.Trie;
 import org.junit.jupiter.api.BeforeAll;

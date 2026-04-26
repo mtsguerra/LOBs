@@ -10,15 +10,20 @@ public class CollisionManifold {
     private final Vector2D normal;
     private final double penetration;
 
-    // --- CONSTRUTOR ORIGINAL (Normal primeiro, Penetração depois) ---
+    /**
+     * Constante estática exigida pelo teste.
+     * A normal é null para satisfazer o assertNull(CollisionManifold.NO_COLLISION.normal()).
+     */
+    public static final CollisionManifold NO_COLLISION = new CollisionManifold(false, null, 0.0);
+
+    // --- CONSTRUTOR ORIGINAL (Normal primeiro) ---
     public CollisionManifold(boolean colliding, Vector2D normal, double penetration) {
         this.colliding = colliding;
         this.normal = normal;
         this.penetration = penetration;
     }
 
-    // --- NOVO CONSTRUTOR (Penetração primeiro, Normal depois) ---
-    // Resolve os erros "incompatible types" nas linhas 369, 389, 414, etc.
+    // --- NOVO CONSTRUTOR (Penetração primeiro) ---
     public CollisionManifold(boolean colliding, double penetration, Vector2D normal) {
         this.colliding = colliding;
         this.penetration = penetration;
@@ -49,7 +54,10 @@ public class CollisionManifold {
         return penetration;
     }
 
+    /**
+     * Retorna a constante de ausência de colisão.
+     */
     public static CollisionManifold noCollision() {
-        return new CollisionManifold(false, Vector2D.NULL_VECTOR, 0.0);
+        return NO_COLLISION;
     }
 }

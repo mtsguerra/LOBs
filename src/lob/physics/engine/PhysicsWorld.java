@@ -1,43 +1,80 @@
 package lob.physics.engine;
 
+import lob.physics.Vector2D;
+import lob.physics.forces.ForceStrategy;
 import lob.physics.shapes.Shape;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import lob.physics.events.PhysicsEvent;
+import lob.physics.events.PhysicsObserver;
+import lob.physics.events.PhysicsSubject;
+import lob.physics.events.CollisionEvent;
+import java.util.*;
 
 /**
- * O PhysicsWorld gere todos os objetos físicos e coordena a simulação.
+ * O PhysicsWorld gere a simulação e serve de fachada para o CollisionManager.
+ * Atualizado para sincronizar com os nomes exigidos pelo PhysicsWorldTest.
  */
-public class PhysicsWorld implements Iterable<Shape> {
+public class PhysicsWorld extends PhysicsSubject<PhysicsEvent> implements Iterable<Shape> {
 
-    private final List<Shape> shapes;
+    // --- CONFIGURAÇÃO ESTÁTICA ---
+    private static double margin = 100.0;
+
+    public static double getMargin() { return margin; }
+    public static void setMargin(double newMargin) { margin = newMargin; }
+    public static void setMargin(int newMargin) { margin = (double) newMargin; }
+
+    // --- CAMPOS DE INSTÂNCIA ---
+    private final List<Shape> shapes = new ArrayList<>();
+    private final List<ForceStrategy> forces = new ArrayList<>();
     private final double width;
     private final double height;
+    private Vector2D gravity = Vector2D.NULL_VECTOR;
+    private ForceStrategy forceStrategy;
+    private CollisionManager collisionManager = new SimpleCollisionManager();
 
-    /**
-     * Construtor que define as dimensões do mundo.
-     * Resolve o erro: constructor PhysicsWorld in class... cannot be applied to given types.
-     */
     public PhysicsWorld(double width, double height) {
-        this.shapes = new ArrayList<>();
         this.width = width;
         this.height = height;
     }
 
+    // --- SIMULAÇÃO (Resolve o erro da linha 296 e 534) ---
+
     /**
-     * Adiciona uma forma ao mundo.
+     * O teste chama update(dt). Mudamos o nome de 'step' para 'update'.
      */
-    public void addShape(Shape shape) {
-        if (shape != null) {
-            shapes.add(shape);
-        }
+    public void update(double dt) {
+        // No futuro, aqui correrá a lógica de integração física
     }
 
     /**
-     * Atalho para addShape.
+     * Sobrecarga para quando o teste passa um valor inteiro.
      */
+    public void update(int dt) {
+        update((double) dt);
+    }
+
+    // --- GESTÃO DE FORMAS (Resolve os erros removeShape das linhas 560, 586 e 611) ---
+
+    public void addShape(Shape shape) {
+        if (shape != null) shapes.add(shape);
+    }
+
     public void add(Shape shape) {
         addShape(shape);
+    }
+
+    public void remove(Shape shape) {
+        shapes.remove(shape);
+    }
+
+    /**
+     * Atalho exigido pelo teste PhysicsWorldTest.
+     */
+    public void removeShape(Shape shape) {
+        remove(shape);
+    }
+
+    public List<Shape> getShapes() {
+        return shapes;
     }
 
     @Override
@@ -45,33 +82,63 @@ public class PhysicsWorld implements Iterable<Shape> {
         return shapes.iterator();
     }
 
-    /**
-     * Getters para as dimensões (úteis para detetar colisões com as bordas).
-     */
+    // --- FACHADA DE COLISÕES (Resolve os erros das linhas 522 e 540) ---
+
+    public void addCollisionListener(Shape shape, PhysicsObserver<CollisionEvent> observer) {
+        collisionManager.addCollisionListener(shape, observer);
+    }
+
+    public void removeAllCollisionListeners(Shape shape) {
+        collisionManager.removeAllCollisionListeners(shape);
+    }
+
+    public double getRestitution() {
+        return collisionManager.getRestitution();
+    }
+
+    public void setRestitution(double restitution) {
+        collisionManager.setRestitution(restitution);
+    }
+
+    public CollisionManager getCollisionManager() { return collisionManager; }
+
+    public void setCollisionManager(CollisionManager collisionManager) {
+        this.collisionManager = collisionManager;
+    }
+
+    // --- GESTÃO DE FORÇAS E GRAVIDADE ---
+
+    public void addForce(ForceStrategy force) {
+        forces.add(force);
+    }
+
+    public List<ForceStrategy> getForces() {
+        return forces;
+    }
+
+    public Vector2D getGravity() { return gravity; }
+    public void setGravity(Vector2D gravity) { this.gravity = gravity; }
+
+    public ForceStrategy getForceStrategy() {
+        return forceStrategy;
+    }
+
+    public void setForceStrategy(ForceStrategy strategy) {
+        this.forceStrategy = strategy;
+    }
+
+    // --- ESTADO E LIMPEZA ---
+
     public double getWidth() { return width; }
     public double getHeight() { return height; }
 
-    /**
-     * Executa um passo da simulação física.
-     */
-    public void step(double dt) {
-        // No futuro, este método irá:
-        // 1. Aplicar forças (Gravidade, Atrito)
-        // 2. Mover as formas (s.move(v, dt))
-        // 3. Resolver colisões entre objetos e com as paredes
-    }
-
-    /**
-     * Remove todos os objetos do mundo.
-     */
     public void clear() {
         shapes.clear();
     }
 
-    /**
-     * Retorna a lista de todas as formas presentes.
-     */
-    public List<Shape> getShapes() {
-        return shapes;
+    public void reset() {
+        shapes.clear();
+        forces.clear();
+        gravity = Vector2D.NULL_VECTOR;
     }
 }

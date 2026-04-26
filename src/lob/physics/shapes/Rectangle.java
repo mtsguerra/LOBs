@@ -66,4 +66,22 @@ public final class Rectangle extends Shape {
     public double x() { return getPosition().getX(); }
     @Override
     public double y() { return getPosition().getY(); }
+
+    // Adiciona estes métodos algures dentro da tua classe Rectangle
+
+    public double xMin() {
+        return xMin;
+    }
+
+    public double xMax() {
+        return xMax;
+    }
+
+    public double yMin() {
+        return yMin;
+    }
+
+    public double yMax() {
+        return yMax;
+    }
 }

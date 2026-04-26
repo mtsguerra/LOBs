@@ -28,30 +28,85 @@ public class NodeTrie<T extends HasPoint> extends Trie<T> {
 
     @Override
     public Trie<T> insert(T element) {
-        // Decidimos o quadrante com base no x e y do elemento
         if (element.x() < xMid) {
-            if (element.y() < yMid)
-                topLeft = topLeft.insert(element);
-            else
-                bottomLeft = bottomLeft.insert(element);
+            if (element.y() < yMid) topLeft = topLeft.insert(element);
+            else bottomLeft = bottomLeft.insert(element);
         } else {
-            if (element.y() < yMid)
-                topRight = topRight.insert(element);
-            else
-                bottomRight = bottomRight.insert(element);
+            if (element.y() < yMid) topRight = topRight.insert(element);
+            else bottomRight = bottomRight.insert(element);
         }
         return this;
     }
 
+    // ==========================================
+    // --- NOVOS MÉTODOS EXIGIDOS PELOS TESTES ---
+    // ==========================================
+
+    /**
+     * Procura e devolve um elemento na árvore.
+     */
+    public T find(T element) {
+        if (element.x() < xMid) {
+            if (element.y() < yMid) return topLeft.find(element);
+            else return bottomLeft.find(element);
+        } else {
+            if (element.y() < yMid) return topRight.find(element);
+            else return bottomRight.find(element);
+        }
+    }
+
+    /**
+     * Insere um elemento substituindo-o se já existir.
+     */
+    public Trie<T> insertReplace(T element) {
+        if (element.x() < xMid) {
+            if (element.y() < yMid) topLeft = topLeft.insertReplace(element);
+            else bottomLeft = bottomLeft.insertReplace(element);
+        } else {
+            if (element.y() < yMid) topRight = topRight.insertReplace(element);
+            else bottomRight = bottomRight.insertReplace(element);
+        }
+        return this;
+    }
+
+    /**
+     * Remove um elemento da árvore.
+     */
+    public Trie<T> delete(T element) {
+        if (element.x() < xMid) {
+            if (element.y() < yMid) topLeft = topLeft.delete(element);
+            else bottomLeft = bottomLeft.delete(element);
+        } else {
+            if (element.y() < yMid) topRight = topRight.delete(element);
+            else bottomRight = bottomRight.delete(element);
+        }
+        return this;
+    }
+
+    /**
+     * Variante do collectPoints usando coordenadas soltas (exigido na linha 66).
+     */
+    public void collectNear(double x, double y, double radius, Set<T> found) {
+        // Otimização de colisão da caixa
+        if (x + radius < xMin || x - radius > xMax ||
+                y + radius < yMin || y - radius > yMax) {
+            return;
+        }
+
+        topLeft.collectNear(x, y, radius, found);
+        topRight.collectNear(x, y, radius, found);
+        bottomLeft.collectNear(x, y, radius, found);
+        bottomRight.collectNear(x, y, radius, found);
+    }
+
+    // --- MANTIDO DO TEU CÓDIGO ORIGINAL ---
+
     @Override
     public void collectPoints(Vector2D center, double radius, Set<T> found) {
-        // Otimização: Se o círculo nem toca na área total deste Nó, ignora os filhos
         if (center.getX() + radius < xMin || center.getX() - radius > xMax ||
                 center.getY() + radius < yMin || center.getY() - radius > yMax) {
             return;
         }
-
-        // Delegamos a procura aos 4 quadrantes
         topLeft.collectPoints(center, radius, found);
         topRight.collectPoints(center, radius, found);
         bottomLeft.collectPoints(center, radius, found);
